@@ -1,5 +1,4 @@
-﻿
-$(document).ready(function () {
+﻿$(document).ready(function () {
     if (obj) {
         $('#formCadastro #Nome').val(obj.Nome);
         $('#formCadastro #CEP').val(obj.CEP);
@@ -10,12 +9,17 @@ $(document).ready(function () {
         $('#formCadastro #Cidade').val(obj.Cidade);
         $('#formCadastro #Logradouro').val(obj.Logradouro);
         $('#formCadastro #Telefone').val(obj.Telefone);
-        $('#formCadastro #CPF').val(obj.CPF.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'));
+        $('#formCadastro #CPF').val(obj.CPF);
     }
 
     $('#formCadastro').submit(function (e) {
         e.preventDefault();
-        
+
+        if (!validateCPF($(this).find("#CPF").val())) {
+            ModalDialog("Ocorreu um erro", "CPF inválido.");
+            return;
+        }
+
         $.ajax({
             url: urlPost,
             method: "POST",
@@ -32,18 +36,18 @@ $(document).ready(function () {
                 "CPF": $(this).find("#CPF").val()
             },
             error:
-            function (r) {
-                if (r.status == 400)
-                    ModalDialog("Ocorreu um erro", r.responseJSON);
-                else if (r.status == 500)
-                    ModalDialog("Ocorreu um erro", "Ocorreu um erro interno no servidor.");
-            },
+                function (r) {
+                    if (r.status == 400)
+                        ModalDialog("Ocorreu um erro", r.responseJSON);
+                    else if (r.status == 500)
+                        ModalDialog("Ocorreu um erro", "Ocorreu um erro interno no servidor.");
+                },
             success:
-            function (r) {
-                ModalDialog("Sucesso!", r)
-                $("#formCadastro")[0].reset();                                
-                window.location.href = urlRetorno;
-            }
+                function (r) {
+                    ModalDialog("Sucesso!", r)
+                    $("#formCadastro")[0].reset();
+                    window.location.href = urlRetorno;
+                }
         });
     })
     
@@ -71,4 +75,25 @@ function ModalDialog(titulo, texto) {
 
     $('body').append(texto);
     $('#' + random).modal('show');
+}
+
+function validateCPF(CPF) {
+    var aggregate = 0;
+    CPF = CPF.replace(/[^0-9]/g, '');
+
+    if (CPF == "00000000000") return false;
+
+    for (i = 1; i <= 9; i++) aggregate = aggregate + parseInt(CPF.substring(i - 1, i)) * (11 - i);
+    var rest = (aggregate * 10) % 11;
+
+    if ((rest == 10) || (rest == 11)) rest = 0;
+    if (rest != parseInt(CPF.substring(9, 10))) return false;
+
+    aggregate = 0;
+    for (i = 1; i <= 10; i++) aggregate = aggregate + parseInt(CPF.substring(i - 1, i)) * (12 - i);
+    rest = (aggregate * 10) % 11;
+
+    if ((rest == 10) || (rest == 11)) rest = 0;
+    if (rest != parseInt(CPF.substring(10, 11))) return false;
+    return true;
 }
