@@ -2,6 +2,7 @@
 using WebAtividadeEntrevista.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web.Mvc;
 using FI.AtividadeEntrevista.DML;
@@ -35,11 +36,11 @@ namespace WebAtividadeEntrevista.Controllers
                 Response.StatusCode = 400;
                 return Json(string.Join(Environment.NewLine, erros));
             }
-            else
+
+            try
             {
-                
                 model.Id = bo.Incluir(new Cliente()
-                {                    
+                {
                     CEP = model.CEP,
                     Cidade = model.Cidade,
                     Email = model.Email,
@@ -51,10 +52,18 @@ namespace WebAtividadeEntrevista.Controllers
                     Telefone = model.Telefone,
                     CPF = model.CPF.Replace(".", "").Replace("-", "")
                 });
-
-           
-                return Json("Cadastro efetuado com sucesso");
             }
+            catch (SqlException e)
+            {
+                Response.StatusCode = 400;
+                if (e.Message.Contains("UQ_CLIENTES_CPF"))
+                {
+                    return Json($"Já existe um cliente com o CPF {model.CPF} cadastrado!");
+                }
+            }
+            
+       
+            return Json("Cadastro efetuado com sucesso");
         }
 
         [HttpPost]
