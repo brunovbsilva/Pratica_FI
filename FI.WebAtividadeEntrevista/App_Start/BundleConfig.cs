@@ -33,7 +33,8 @@ namespace FI.WebAtividadeEntrevista
             bundles.Add(new ScriptBundle("~/bundles/clientes")
                 .Include(
                     "~/Scripts/Clientes/FI.Clientes.js",
-                    "~/Scripts/Clientes/FI.MaskCPF.js"
+                    "~/Scripts/Clientes/FI.Modais.js",
+                    "~/Scripts/Clientes/FI.CPF.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/listClientes")
@@ -43,7 +44,8 @@ namespace FI.WebAtividadeEntrevista
             bundles.Add(new ScriptBundle("~/bundles/altClientes")
                 .Include(
                     "~/Scripts/Clientes/FI.AltClientes.js",
-                    "~/Scripts/Clientes/FI.MaskCPF.js"
+                    "~/Scripts/Clientes/FI.Modais.js",
+                    "~/Scripts/Clientes/FI.CPF.js"
                 ));
 
             bundles.Add(new StyleBundle("~/Content/css")
