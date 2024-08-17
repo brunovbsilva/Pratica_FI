@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace WebAtividadeEntrevista.Models
 {
     /// <summary>
     /// Classe de Modelo de Cliente
     /// </summary>
-    public class ClienteModel
+    public class ClienteModel : BaseModel
     {
-        public long Id { get; set; }
         
         /// <summary>
         /// CEP
@@ -66,6 +62,18 @@ namespace WebAtividadeEntrevista.Models
         /// Telefone
         /// </summary>
         public string Telefone { get; set; }
+
+        /// <summary>
+        /// CPF
+        /// </summary>
+        [Required]
+        [RegularExpression(@"^\d{3}\.\d{3}\.\d{3}-\d{2}$", ErrorMessage = "Digite um CPF válido")]
+        public string CPF { get; set; }
+
+        /// <summary>
+        /// Lista de beneficiários
+        /// </summary>
+        public List<BeneficiarioModel> Beneficiarios { get; set; }
 
     }    
 }
