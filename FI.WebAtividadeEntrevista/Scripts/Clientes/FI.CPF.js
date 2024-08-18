@@ -1,5 +1,9 @@
 ﻿$('#CPF').on('input', function () {
     var value = $(this).val();
+    $(this).val(formatCPF(value));
+});
+
+function formatCPF(value) {
     value = value.replace(/\D/g, '');
 
     if (value.length > 9) {
@@ -9,9 +13,12 @@
     } else if (value.length > 3) {
         value = value.replace(/(\d{3})(\d{3})/, '$1.$2');
     }
+    return value;
+}
 
-    $(this).val(value);
-});
+function formatBeneficiariosCPF(beneficiarios) {
+    beneficiarios.forEach(beneficiario => beneficiario.CPF = formatCPF(beneficiario.CPF));
+}
 
 function validateCPF(CPF) {
     var aggregate = 0;

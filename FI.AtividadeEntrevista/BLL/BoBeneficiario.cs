@@ -66,7 +66,7 @@ namespace FI.AtividadeEntrevista.BLL
         /// <param name="idCliente">Objeto de idCliente</param>
         public void Atualizar(List<Beneficiario> list)
         {
-            List<Beneficiario> beneficiarios = Listar(list.First().Id);
+            List<Beneficiario> beneficiarios = Listar(list.First().IdCliente);
             Update(list.Where(x => x.Id > 0).ToList());
             Insert(list.Where(x => x.Id == 0).ToList());
             beneficiarios.Where(x => !list.Select(y => y.Id).Contains(x.Id))
@@ -105,7 +105,7 @@ namespace FI.AtividadeEntrevista.BLL
             beneficiariosList.ForEach(x => Alterar(x));
         }
 
-        public void DeletarDeCliente(long clientId)
+        public void DeleteFromClient(long clientId)
         {
             List<Beneficiario> beneficiarios = Listar(clientId);
             beneficiarios.ForEach(beneficiario => Excluir(beneficiario.Id));

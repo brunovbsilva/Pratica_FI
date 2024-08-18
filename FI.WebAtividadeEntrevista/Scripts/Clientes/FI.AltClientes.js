@@ -1,4 +1,6 @@
-﻿$(document).ready(function () {
+﻿var beneficiarios = [];
+
+$(document).ready(function () {
     if (obj) {
         $('#formCadastro #Nome').val(obj.Nome);
         $('#formCadastro #CEP').val(obj.CEP);
@@ -9,7 +11,7 @@
         $('#formCadastro #Cidade').val(obj.Cidade);
         $('#formCadastro #Logradouro').val(obj.Logradouro);
         $('#formCadastro #Telefone').val(obj.Telefone);
-        $('#formCadastro #CPF').val(obj.CPF);
+        $('#formCadastro #CPF').val(obj.CPF.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'));
     }
 
     $('#formCadastro').submit(function (e) {
@@ -19,6 +21,8 @@
             ModalDialog("Ocorreu um erro", "CPF inválido.");
             return;
         }
+        
+        formatBeneficiariosCPF(beneficiarios);
 
         $.ajax({
             url: urlPost,
@@ -33,7 +37,8 @@
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
                 "Telefone": $(this).find("#Telefone").val(),
-                "CPF": $(this).find("#CPF").val()
+                "CPF": $(this).find("#CPF").val(),
+                "Beneficiarios": beneficiarios
             },
             error:
                 function (r) {

@@ -8,3 +8,32 @@
     padding-left: 15px;
     padding-right: 15px;
 }
+
+.form-container {
+    display: flex;   
+    gap: 10px;
+}
+.form-container__cpf {
+    width: 170px;
+}
+.form-container__name {
+    width: 240px;
+}
+.form-container__actions {
+    flex: 136px;
+}
+
+.cpf-column {
+    width: 150px;
+}
+.action-column {
+    width: 136px;
+}
+
+.include-btn-modal {
+    margin-top: 25px;
+}
+
+.ocult-table {
+    display: none;
+}

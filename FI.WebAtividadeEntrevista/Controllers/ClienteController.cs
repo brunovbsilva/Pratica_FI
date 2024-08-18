@@ -6,62 +6,34 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web.Mvc;
 using FI.AtividadeEntrevista.DML;
+using FI.WebAtividadeEntrevista.Controllers;
 
 namespace WebAtividadeEntrevista.Controllers
 {
-    public class ClienteController : Controller
+    public class ClienteController : BaseController
     {
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-
-        public ActionResult Incluir()
-        {
-            return View();
-        }
+        private readonly BoCliente _bo = new BoCliente();
+        private readonly BoBeneficiario _boBeneficiario = new BoBeneficiario();
+        public ActionResult Index() => View();
+        public ActionResult Incluir() => View();
 
         [HttpPost]
         public JsonResult Incluir(ClienteModel model)
         {
-            BoCliente bo = new BoCliente();
-            
-            if (!this.ModelState.IsValid)
-            {
-                List<string> erros = (from item in ModelState.Values
-                                      from error in item.Errors
-                                      select error.ErrorMessage).ToList();
-
-                Response.StatusCode = 400;
-                return Json(string.Join(Environment.NewLine, erros));
-            }
+            if (!ModelState.IsValid) return CheckModelValidity();
 
             try
             {
-                model.Id = bo.Incluir(new Cliente()
-                {
-                    CEP = model.CEP,
-                    Cidade = model.Cidade,
-                    Email = model.Email,
-                    Estado = model.Estado,
-                    Logradouro = model.Logradouro,
-                    Nacionalidade = model.Nacionalidade,
-                    Nome = model.Nome,
-                    Sobrenome = model.Sobrenome,
-                    Telefone = model.Telefone,
-                    CPF = model.CPF.Replace(".", "").Replace("-", "")
-                });
+                model.UpdateId(_bo.Incluir((Cliente)model));
+                if(model.Beneficiarios.Any())
+                    _boBeneficiario.Atualizar(model.Beneficiarios.Select(beneficiario => (Beneficiario)beneficiario).ToList());
             }
             catch (SqlException e)
             {
                 Response.StatusCode = 400;
                 if (e.Message.Contains("UQ_CLIENTES_CPF"))
-                {
                     return Json($"Já existe um cliente com o CPF {model.CPF} cadastrado!");
-                }
             }
-            
        
             return Json("Cadastro efetuado com sucesso");
         }
@@ -69,63 +41,17 @@ namespace WebAtividadeEntrevista.Controllers
         [HttpPost]
         public JsonResult Alterar(ClienteModel model)
         {
-            BoCliente bo = new BoCliente();
-       
-            if (!this.ModelState.IsValid)
-            {
-                List<string> erros = (from item in ModelState.Values
-                                      from error in item.Errors
-                                      select error.ErrorMessage).ToList();
+            if (!ModelState.IsValid) return CheckModelValidity();
 
-                Response.StatusCode = 400;
-                return Json(string.Join(Environment.NewLine, erros));
-            }
-
-            bo.Alterar(new Cliente()
-            {
-                Id = model.Id,
-                CEP = model.CEP,
-                Cidade = model.Cidade,
-                Email = model.Email,
-                Estado = model.Estado,
-                Logradouro = model.Logradouro,
-                Nacionalidade = model.Nacionalidade,
-                Nome = model.Nome,
-                Sobrenome = model.Sobrenome,
-                Telefone = model.Telefone,
-                CPF = model.CPF.Replace(".", "").Replace("-", "")
-            });
-                           
+            model.UpdateId(model.Id);
+            _bo.Alterar((Cliente)model);
+            if (model.Beneficiarios.Any()) _boBeneficiario.Atualizar(model.Beneficiarios.Select(beneficiario => (Beneficiario)beneficiario).ToList());
+            else _boBeneficiario.DeleteFromClient(model.Id);
             return Json("Cadastro alterado com sucesso");
         }
 
         [HttpGet]
-        public ActionResult Alterar(long id)
-        {
-            BoCliente bo = new BoCliente();
-            Cliente cliente = bo.Consultar(id);
-            Models.ClienteModel model = null;
-
-            if (cliente != null)
-            {
-                model = new ClienteModel()
-                {
-                    Id = cliente.Id,
-                    CEP = cliente.CEP,
-                    Cidade = cliente.Cidade,
-                    Email = cliente.Email,
-                    Estado = cliente.Estado,
-                    Logradouro = cliente.Logradouro,
-                    Nacionalidade = cliente.Nacionalidade,
-                    Nome = cliente.Nome,
-                    Sobrenome = cliente.Sobrenome,
-                    Telefone = cliente.Telefone,
-                    CPF = cliente.CPF
-                };
-            }
-
-            return View(model);
-        }
+        public ActionResult Alterar(long id) => View((ClienteModel)_bo.Consultar(id));
 
         [HttpPost]
         public JsonResult ClienteList(int jtStartIndex = 0, int jtPageSize = 0, string jtSorting = null)

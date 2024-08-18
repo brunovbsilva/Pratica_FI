@@ -1,4 +1,5 @@
-﻿$(document).ready(function () {
+﻿var beneficiarios = [];
+$(document).ready(function () {
     $('#formCadastro').submit(function (e) {
         e.preventDefault();
 
@@ -6,7 +7,7 @@
             ModalDialog("Ocorreu um erro", "CPF inválido.");
             return;
         }
-
+        
         $.ajax({
             url: urlPost,
             method: "POST",
@@ -21,6 +22,7 @@
                 "Logradouro": $(this).find("#Logradouro").val(),
                 "Telefone": $(this).find("#Telefone").val(),
                 "CPF": $(this).find("#CPF").val(),
+                "Beneficiarios": beneficiarios
             },
             error:
             function (r) {

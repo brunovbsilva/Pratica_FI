@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using FI.AtividadeEntrevista.DML;
+using WebGrease.Css.Extensions;
 
 namespace WebAtividadeEntrevista.Models
 {
@@ -8,7 +11,6 @@ namespace WebAtividadeEntrevista.Models
     /// </summary>
     public class ClienteModel : BaseModel
     {
-        
         /// <summary>
         /// CEP
         /// </summary>
@@ -73,7 +75,120 @@ namespace WebAtividadeEntrevista.Models
         /// <summary>
         /// Lista de beneficiários
         /// </summary>
-        public List<BeneficiarioModel> Beneficiarios { get; set; }
+        public List<BeneficiarioModel> Beneficiarios { get; private set; } = new List<BeneficiarioModel>();
 
+        #region Methods
+        public void AddBeneficiario(BeneficiarioModel beneficiario) => Beneficiarios.Add(beneficiario);
+
+        public void UpdateId(long id)
+        {
+            Id = id;
+            Beneficiarios.ForEach(beneficiario => beneficiario.SetClientId(id));
+        }
+        #endregion
+
+        #region Constructors
+        public ClienteModel() {}
+        public ClienteModel(long id, string cep, string city, string email, string state, string lograd,
+            string native, string name, string lastName, string phone, string cpf)
+        {
+            Id = id;
+            CEP = cep;
+            Cidade = city;
+            Email = email;
+            Estado = state;
+            Logradouro = lograd;
+            Nacionalidade = native;
+            Nome = name;
+            Sobrenome = lastName;
+            Telefone = phone;
+            CPF = cpf;
+        }
+        public ClienteModel(long id, string cep, string city, string email, string state, string lograd,
+            string native, string name, string lastName, string phone, string cpf, List<BeneficiarioModel> beneficiarios)
+        {
+            Id = id;
+            CEP = cep;
+            Cidade = city;
+            Email = email;
+            Estado = state;
+            Logradouro = lograd;
+            Nacionalidade = native;
+            Nome = name;
+            Sobrenome = lastName;
+            Telefone = phone;
+            CPF = cpf;
+            beneficiarios.ForEach(AddBeneficiario);
+        }
+        public ClienteModel(string cep, string city, string email, string state, string lograd,
+            string native, string name, string lastName, string phone, string cpf, List<BeneficiarioModel> beneficiarios)
+        {
+            Id = 0;
+            CEP = cep;
+            Cidade = city;
+            Email = email;
+            Estado = state;
+            Logradouro = lograd;
+            Nacionalidade = native;
+            Nome = name;
+            Sobrenome = lastName;
+            Telefone = phone;
+            CPF = cpf;
+            beneficiarios.ForEach(AddBeneficiario);
+        }
+        public ClienteModel(string cep, string city, string email, string state, string lograd,
+            string native, string name, string lastName, string phone, string cpf)
+        {
+            Id = 0;
+            CEP = cep;
+            Cidade = city;
+            Email = email;
+            Estado = state;
+            Logradouro = lograd;
+            Nacionalidade = native;
+            Nome = name;
+            Sobrenome = lastName;
+            Telefone = phone;
+            CPF = cpf;
+        }
+        #endregion
+
+        #region Operators
+        public static implicit operator ClienteModel(Cliente client)
+        {
+            return new ClienteModel(
+                client.Id,
+                client.CEP,
+                client.Cidade,
+                client.Email,
+                client.Estado,
+                client.Logradouro,
+                client.Nacionalidade,
+                client.Nome,
+                client.Sobrenome,
+                client.Telefone,
+                client.CPF.Replace(".", "").Replace("-", ""),
+                client.Beneficiarios.Select(x => (BeneficiarioModel)x).ToList()
+            );
+        }
+
+        public static explicit operator Cliente(ClienteModel client)
+        {
+            return new Cliente(
+                client.Id,
+                client.CEP,
+                client.Cidade,
+                client.Email,
+                client.Estado,
+                client.Logradouro,
+                client.Nacionalidade,
+                client.Nome,
+                client.Sobrenome,
+                client.Telefone,
+                client.CPF.Replace(".", "").Replace("-", ""),
+                client.Beneficiarios.Select(x => (Beneficiario)x).ToList()
+            );
+        }   
+        #endregion
     }    
 }

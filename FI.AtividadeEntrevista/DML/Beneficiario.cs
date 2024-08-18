@@ -18,7 +18,7 @@
         /// <summary>
         /// IdCliente
         /// </summary>
-        public long IdCliente { get; set; }
+        public long IdCliente { get; private set; }
 
         #region Constructors
         public Beneficiario() {}

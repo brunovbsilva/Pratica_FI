@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using FI.AtividadeEntrevista.DML;
 
 namespace WebAtividadeEntrevista.Models
 {
@@ -21,6 +22,41 @@ namespace WebAtividadeEntrevista.Models
         /// Id do Cliente
         /// </summary>
         [Required]
-        public long IdCliente { get; set; }
+        public long IdCliente { get; private set; }
+
+        #region Methods
+
+        public void SetClientId(long id) => IdCliente = id;
+        #endregion
+
+        #region Constructors
+        public BeneficiarioModel() {}
+        public BeneficiarioModel(long id, string name, string cpf, long idCliente)
+        {
+            Id = id;
+            Nome = name;
+            CPF = cpf;
+            IdCliente = idCliente;
+        }
+        public BeneficiarioModel(string name, string cpf, long idCliente)
+        {
+            Id = 0;
+            Nome = name;
+            CPF = cpf;
+            IdCliente = idCliente;
+        }
+        #endregion
+
+        #region Operators
+        public static implicit operator BeneficiarioModel(Beneficiario beneficiario)
+        {
+            return new BeneficiarioModel(beneficiario.Id, beneficiario.Nome, beneficiario.CPF, beneficiario.IdCliente);
+        }
+
+        public static explicit operator Beneficiario(BeneficiarioModel beneficiario)
+        {
+            return new Beneficiario(beneficiario.Id, beneficiario.Nome, beneficiario.CPF, beneficiario.IdCliente);
+        }
+        #endregion
     }
 }
