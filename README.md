@@ -7,7 +7,7 @@ Projeto desenvolvido durante os dias 17 e 18 de agosto de 2024, referente ao tes
 * Download e subida do projeto para o github;
 * Criação do layout e integração das páginas Insert e Update de clientes (sem beneficiários);
 * Criação de procedores e controller de beneficiários;
-* Criação e integração do modal de Beneficiários as telas de Insert e Delete de clientes dinamicamente;
+* Criação e integração do modal de Beneficiários as telas de Insert e Update de clientes dinamicamente;
 * Refatoração e redução de códigos duplicados;
 
 ## 📌 Pontos para melhoria
