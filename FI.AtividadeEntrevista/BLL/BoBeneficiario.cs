@@ -85,7 +85,7 @@ namespace FI.AtividadeEntrevista.BLL
             beneficiariosList?.ForEach(beneficiario =>
             {
                 if (CheckExistence(beneficiario))
-                    throw new Exception($"CPF({beneficiario.CPF}) já cadastrado para o cliente.");
+                    throw new Exception($"CPF {beneficiario.CPF} já cadastrado para o cliente.");
             });
             beneficiariosList?.ForEach(x => Incluir(x));
         }

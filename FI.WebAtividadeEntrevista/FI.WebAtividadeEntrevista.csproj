@@ -354,7 +354,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\themes\base\minified\images\" />
-    <Folder Include="Views\Beneficiario\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
