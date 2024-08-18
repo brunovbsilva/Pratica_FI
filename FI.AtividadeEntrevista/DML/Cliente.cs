@@ -1,14 +1,12 @@
-﻿namespace FI.AtividadeEntrevista.DML
+﻿using System.Collections.Generic;
+
+namespace FI.AtividadeEntrevista.DML
 {
     /// <summary>
     /// Classe de cliente que representa o registo na tabela Cliente do Banco de Dados
     /// </summary>
-    public class Cliente
+    public class Cliente : BaseEntity
     {
-        /// <summary>
-        /// Id
-        /// </summary>
-        public long Id { get; set; }
         
         /// <summary>
         /// CEP
@@ -60,5 +58,79 @@
         /// </summary>
         public string CPF { get; set; }
 
+        /// <summary>
+        /// Lista de beneficiarios
+        /// </summary>
+        public List<Beneficiario> Beneficiarios { get; private set; } = new List<Beneficiario>();
+
+        #region Methods
+        public void AddBeneficiario(Beneficiario beneficiario) => Beneficiarios.Add(beneficiario);
+        #endregion
+
+        #region Constructors
+        public Cliente() {}
+        public Cliente(long id, string cep, string city, string email, string state, string lograd,
+            string native, string name, string lastName, string phone, string cpf)
+        {
+            Id = id;
+            CEP = cep;
+            Cidade = city;
+            Email = email;
+            Estado = state;
+            Logradouro = lograd;
+            Nacionalidade = native;
+            Nome = name;
+            Sobrenome = lastName;
+            Telefone = phone;
+            CPF = cpf;
+        }
+        public Cliente(long id, string cep, string city, string email, string state, string lograd,
+            string native, string name, string lastName, string phone, string cpf, List<Beneficiario> beneficiarios)
+        {
+            Id = id;
+            CEP = cep;
+            Cidade = city;
+            Email = email;
+            Estado = state;
+            Logradouro = lograd;
+            Nacionalidade = native;
+            Nome = name;
+            Sobrenome = lastName;
+            Telefone = phone;
+            CPF = cpf;
+            beneficiarios.ForEach(AddBeneficiario);
+        }
+        public Cliente(string cep, string city, string email, string state, string lograd,
+            string native, string name, string lastName, string phone, string cpf, List<Beneficiario> beneficiarios)
+        {
+            Id = 0;
+            CEP = cep;
+            Cidade = city;
+            Email = email;
+            Estado = state;
+            Logradouro = lograd;
+            Nacionalidade = native;
+            Nome = name;
+            Sobrenome = lastName;
+            Telefone = phone;
+            CPF = cpf;
+            beneficiarios.ForEach(AddBeneficiario);
+        }
+        public Cliente(string cep, string city, string email, string state, string lograd,
+            string native, string name, string lastName, string phone, string cpf)
+        {
+            Id = 0;
+            CEP = cep;
+            Cidade = city;
+            Email = email;
+            Estado = state;
+            Logradouro = lograd;
+            Nacionalidade = native;
+            Nome = name;
+            Sobrenome = lastName;
+            Telefone = phone;
+            CPF = cpf;
+        }
+        #endregion
     }    
 }
