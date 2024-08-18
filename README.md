@@ -12,7 +12,7 @@ Projeto desenvolvido durante os dias 17 e 18 de agosto de 2024, referente ao tes
 
 ## 📌 Pontos para melhoria
 
-* Padronização de nomenclatura de variáveis e funcões (preferívelmente em inglês);
+* Padronização de nomenclatura de variáveis e funcões (preferencialmente em inglês);
 * Melhoria no processo de inserção de beneficiários visando performance;
 
 ## 🛠️ Construído com
